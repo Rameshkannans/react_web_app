@@ -7,7 +7,6 @@ import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProdectedRoute'
 import Test from './components/Test';
 import FrontPage from './layouts/FrontPage';
-// import MainDash from './pages/MainDash';
 import MyAccount from './pages/MyAccount';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
