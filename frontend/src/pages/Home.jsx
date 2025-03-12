@@ -4,16 +4,24 @@ import Note from "../components/Note";
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
 
-
 function Home() {
     const [notes, setNotes] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-    const [editId, setEditId] = useState(null); // Stores the note being edited
+    const [editId, setEditId] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         getNotes();
+        getUser();
     }, []);
+
+    const getUser = () => {
+        api
+            .get("/api/user/info/")
+            .then((res) => setUser(res.data.username))
+            .catch((err) => console.error("Failed to fetch user info", err));
+    };
 
     const getNotes = () => {
         api
@@ -32,7 +40,6 @@ function Home() {
             })
             .catch((error) => alert(error));
     };
-
 
     const editNote = (id) => {
         const noteToEdit = notes.find((note) => note.id === id);
@@ -53,8 +60,6 @@ function Home() {
             })
             .catch((err) => alert(err));
     };
-
-
 
     const updateNote = (e) => {
         e.preventDefault();
@@ -80,12 +85,23 @@ function Home() {
     return (
         <>
             <div>
+                <div className="my-5">
+                    {user && <h3>Welcome, {user}!</h3>}  {/* Display logged-in user */}
+                </div>
                 <div>
                     <h2>Notes</h2>
                     <div className="note-container">
                         {notes.map((note) => (
                             <div key={note.id}>
-                                <Note note={note} onDelete={deleteNote} onUpdate={editNote} />
+                                <p className="note-title">{note.title}</p>
+                                <p className="note-content">{note.content}</p>
+                                <p className="note-date">{new Date(note.created_at).toLocaleDateString()}</p> {/* Fixed undefined 'formattedDate' */}
+                                <button className="btn btn-warning" onClick={() => editNote(note.id)}>
+                                    Edit
+                                </button>
+                                <button className="btn btn-danger" onClick={() => deleteNote(note.id)}>
+                                    Delete
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -124,7 +140,6 @@ function Home() {
             </div>
 
             <Link to="/logout" className="btn btn-danger">Logout</Link>
-
         </>
     );
 }

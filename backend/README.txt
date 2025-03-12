@@ -60,6 +60,7 @@
 https://www.youtube.com/watch?v=c-QsfbznSXI&t=605s
 https://www.youtube.com/watch?v=5j7QLUx277Q
 https://www.npmjs.com/package/react-scroll-horizontal
+https://chatgpt.com/share/67d18bca-3244-8006-aa98-81605eab584f
 =============================================================================================================================
 
 Admin credentials:
