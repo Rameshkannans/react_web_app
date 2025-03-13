@@ -7,10 +7,12 @@ import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProdectedRoute'
 import Test from './components/Test';
 import FrontPage from './layouts/FrontPage';
-import MyAccount from './pages/MyAccount';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
+import Dashboard from './pages/Dashboard';
 
+import MyAccount from './pages/MyAccount';
+import Curd from './pages/Curd';
 function Logout() {
   localStorage.clear();
   return <Navigate to="/login" />;
@@ -33,9 +35,10 @@ function App() {
         <Route path="/test" element={<Test />} />
 
         {/* Protected Routes */}
-        <Route element={<ProtectedRoute><Header /><Outlet /><Footer /></ProtectedRoute>}>
-          <Route path="/dashboard" element={<Home />} />
-          <Route path="/my-account" element={<MyAccount />} />
+        <Route element={<ProtectedRoute><Home /></ProtectedRoute>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<MyAccount />} />
+          <Route path="/curd" element={<Curd />} />
         </Route>
 
         {/* 404 Page */}
@@ -46,3 +49,4 @@ function App() {
 }
 
 export default App;
+

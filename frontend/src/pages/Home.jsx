@@ -1,146 +1,87 @@
-import { useState, useEffect } from "react";
-import api from "../api";
-import Note from "../components/Note";
+import { useState } from "react";
 import "../styles/Home.css";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FaHome, FaUser, FaCog, FaBars } from 'react-icons/fa';
 
 function Home() {
-    const [notes, setNotes] = useState([]);
-    const [content, setContent] = useState("");
-    const [title, setTitle] = useState("");
-    const [editId, setEditId] = useState(null);
-    const [user, setUser] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        getNotes();
-        getUser();
-    }, []);
-
-    const getUser = () => {
-        api
-            .get("/api/user/info/")
-            .then((res) => setUser(res.data.username))
-            .catch((err) => console.error("Failed to fetch user info", err));
-    };
-
-    const getNotes = () => {
-        api
-            .get("/api/notes/")
-            .then((res) => setNotes(res.data))
-            .catch((err) => alert(err));
-    };
-
-    const deleteNote = (id) => {
-        api
-            .delete(`/api/notes/delete/${id}/`)
-            .then((res) => {
-                if (res.status === 204) alert("Note deleted!");
-                else alert("Failed to delete note.");
-                getNotes();
-            })
-            .catch((error) => alert(error));
-    };
-
-    const editNote = (id) => {
-        const noteToEdit = notes.find((note) => note.id === id);
-        setEditId(id);
-        setTitle(noteToEdit.title);
-        setContent(noteToEdit.content);
-    };
-
-    const createNote = (e) => {
-        e.preventDefault();
-        api
-            .post("/api/notes/", { title, content })
-            .then((res) => {
-                if (res.status === 201) alert("Note created!");
-                else alert("Failed to create note.");
-                resetForm();
-                getNotes();
-            })
-            .catch((err) => alert(err));
-    };
-
-    const updateNote = (e) => {
-        e.preventDefault();
-        if (!editId) return;
-
-        api
-            .put(`/api/notes/update/${editId}/`, { title, content })
-            .then((res) => {
-                if (res.status === 200) alert("Note updated!");
-                else alert("Failed to update note.");
-                resetForm();
-                getNotes();
-            })
-            .catch((err) => alert(err));
-    };
-
-    const resetForm = () => {
-        setEditId(null);
-        setTitle("");
-        setContent("");
+    const toggleSidebar = () => {
+        setIsOpen(!isOpen);
     };
 
     return (
-        <>
-            <div>
-                <div className="my-5">
-                    {user && <h3>Welcome, {user}!</h3>}  {/* Display logged-in user */}
+        <div>
+            {/* Fixed Navbar */}
+            <nav className="navbar navbar-dark bg-primary p-2 fixed-top">
+                <button className="btn btn-primary d-md-none" onClick={toggleSidebar}>
+                    <FaBars />
+                </button>
+                <span className="text-white ms-3">Top Menu</span>
+            </nav>
+
+            {/* Sidebar for mobile view */}
+            {isOpen && (
+                <div className="bg-secondary text-white p-3 d-md-none" style={{ width: '100%', position: 'absolute', top: '56px', zIndex: 1000 }}>
+                    <ul className="list-unstyled">
+                        <li className="mb-3">
+                            <Link to="/dashboard" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaHome className="me-2" /> Home
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/profile" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaUser className="me-2" /> Profile
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/curd" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaCog className="me-2" /> CURD
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/logout" className="btn btn-danger text-decoration-none d-flex align-items-center">
+                                <FaCog className="me-2" /> Logout
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
-                <div>
-                    <h2>Notes</h2>
-                    <div className="note-container">
-                        {notes.map((note) => (
-                            <div key={note.id}>
-                                <p className="note-title">{note.title}</p>
-                                <p className="note-content">{note.content}</p>
-                                <p className="note-date">{new Date(note.created_at).toLocaleDateString()}</p> {/* Fixed undefined 'formattedDate' */}
-                                <button className="btn btn-warning" onClick={() => editNote(note.id)}>
-                                    Edit
-                                </button>
-                                <button className="btn btn-danger" onClick={() => deleteNote(note.id)}>
-                                    Delete
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+            )}
+
+            {/* Sidebar for desktop view */}
+            <div className="d-flex">
+                <div className="bg-dark text-white p-3 d-none d-md-block" style={{ minHeight: '100vh', width: '15%', position: 'fixed', top: '40px' }}>
+                    <ul className="list-unstyled">
+                        <li className="mb-3">
+                            <Link to="/dashboard" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaHome className="me-2" /> Home
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/profile" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaUser className="me-2" /> Profile
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/curd" className="text-white text-decoration-none d-flex align-items-center">
+                                <FaCog className="me-2" /> CURD
+                            </Link>
+                        </li>
+                        <li className="mb-3">
+                            <Link to="/logout" className="btn btn-danger text-decoration-none d-flex align-items-center">
+                                <FaCog className="me-2" /> Logout
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
 
-                <h2>{editId ? "Update Note" : "Create a Note"}</h2>
-                <form onSubmit={editId ? updateNote : createNote}>
-                    <label htmlFor="title">Title:</label>
-                    <br />
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        required
-                        onChange={(e) => setTitle(e.target.value)}
-                        value={title}
-                    />
-                    <br />
-                    <label htmlFor="content">Content:</label>
-                    <br />
-                    <textarea
-                        id="content"
-                        name="content"
-                        required
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    ></textarea>
-                    <br />
-                    <input type="submit" value={editId ? "Update" : "Submit"} />
-                    {editId && (
-                        <button type="button" className="btn btn-secondary" onClick={resetForm}>
-                            Cancel Update
-                        </button>
-                    )}
-                </form>
+                {/* Main Content */}
+                <div className="p-4 flex-grow-1" style={{ marginLeft: '15%', marginTop: '56px' }}>
+                    <Outlet />
+                </div>
             </div>
-
-            <Link to="/logout" className="btn btn-danger">Logout</Link>
-        </>
+        </div>
     );
 }
 
