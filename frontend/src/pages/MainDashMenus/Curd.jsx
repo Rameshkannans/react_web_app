@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from "react";
-import api from "../api";
-import Note from "../components/Note";
-import "../styles/Home.css";
+import api from "../../api";
+// import "../styles/Home.css";
+import '../../styles/Home.css'
 import { Link } from "react-router-dom";
 
 const Curd = () => {
@@ -84,7 +84,7 @@ const Curd = () => {
     };
 
     return (
-        <>
+        <>  
             <div>
                 <div className="my-5">
                     {user && <h3>Welcome, {user}!</h3>}  {/* Display logged-in user */}

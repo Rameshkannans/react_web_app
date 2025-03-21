@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'; // Added missing Link import
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCubes, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import ai_wall_1 from '../assets/ai-wall-1.jpg';
+import ai_wall_2 from '../assets/ai-wall-2.jpg';
 
 const FrontPage = () => {
     return (
@@ -10,7 +11,7 @@ const FrontPage = () => {
             <section
                 className="vh-100 d-flex align-items-center justify-content-center"
                 style={{
-                    backgroundImage: `url(${ai_wall_1})`,
+                    backgroundImage: `url(${ai_wall_2})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}

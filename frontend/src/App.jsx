@@ -11,8 +11,9 @@ import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Dashboard from './pages/Dashboard';
 
-import MyAccount from './pages/MyAccount';
-import Curd from './pages/Curd';
+import Curd from './pages/MainDashMenus/Curd'
+import Profile from './pages/MainDashMenus/Profile';
+import Activity from './pages/MainDashMenus/Activity';
 function Logout() {
   localStorage.clear();
   return <Navigate to="/login" />;
@@ -37,7 +38,8 @@ function App() {
         {/* Protected Routes */}
         <Route element={<ProtectedRoute><Home /></ProtectedRoute>}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<MyAccount />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/activity" element={<Activity />} />
           <Route path="/curd" element={<Curd />} />
         </Route>
 
