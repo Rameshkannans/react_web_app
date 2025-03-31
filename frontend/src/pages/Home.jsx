@@ -89,17 +89,17 @@ function Home() {
                         <ul className="list-unstyled">
                             <li className="mb-3">
                                 <Link to="/notifications" className="text-dark text-decoration-none d-flex align-items-center">
-                                    <FaBell className="me-2" /> App 1
+                                    <FaBell className="me-2" /> Learning
                                 </Link>
                             </li>
                             <li className="mb-3">
                                 <Link to="/messages" className="text-dark text-decoration-none d-flex align-items-center">
-                                    <FaEnvelope className="me-2" /> App 2
+                                    <FaEnvelope className="me-2" /> Blogs
                                 </Link>
                             </li>
                             <li className="mb-3">
                                 <Link to="/settings" className="text-dark text-decoration-none d-flex align-items-center">
-                                    <FaCog className="me-2" /> App 3
+                                    <FaCog className="me-2" /> E-Commerce
                                 </Link>
                             </li>
                         </ul>
@@ -112,14 +112,12 @@ function Home() {
                     {!isMobile && (
                         <div className="card bg-transparent shadow-lg text-white mx-5 p-3 d-none d-md-block" style={{ minHeight: '70vh', width: '18%', position: 'fixed', top: '40px', marginTop: '40px', borderRadius: '20px', backdropFilter: 'blur(2px)' }}>
                             <div className="text-center">
-                                {userDetails && userDetails.profile_picture && (
-                                    <img
-                                        src={userDetails.profile_picture}
-                                        className="img-fluid"
-                                        alt="Profile"
-                                        style={{ width: "200px", height: "200px", borderRadius: "20px" }}
-                                    />
-                                )}
+                                <img
+                                    src={userDetails?.profile_picture ? userDetails.profile_picture : ai_wall_1}
+                                    className="img-fluid"
+                                    alt="Profile"
+                                    style={{ width: "200px", height: "200px", borderRadius: "20px" }}
+                                />
                             </div>
 
                             <div className="card-body">
@@ -159,17 +157,17 @@ function Home() {
                             <ul className="list-unstyled">
                                 <li className="mb-3">
                                     <Link to="/notifications" className="text-dark text-decoration-none d-flex align-items-center">
-                                        <FaBell className="me-2" /> App 1
+                                        <FaBell className="me-2" /> Learning
                                     </Link>
                                 </li>
                                 <li className="mb-3">
                                     <Link to="/messages" className="text-dark text-decoration-none d-flex align-items-center">
-                                        <FaEnvelope className="me-2" /> App 2
+                                        <FaEnvelope className="me-2" /> Blogs
                                     </Link>
                                 </li>
                                 <li className="mb-3">
                                     <Link to="/settings" className="text-dark text-decoration-none d-flex align-items-center">
-                                        <FaCog className="me-2" /> App 3
+                                        <FaCog className="me-2" /> E-Commerce
                                     </Link>
                                 </li>
                             </ul>
