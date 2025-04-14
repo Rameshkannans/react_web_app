@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import useUserData from "../../components/crud/useUserData";
 import updateUserData from "../../components/crud/updateUserData";
+import axios from "axios";
 
 const Profile = () => {
   const { user, userDetails } = useUserData();
+
   const { updateUser, updateUserDetails } = updateUserData();
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+  // ======================================================================
+
   const [userForm, setUserForm] = useState({
     username: "",
     first_name: "",
     last_name: "",
     email: "",
-  });
-
-  const [detailsForm, setDetailsForm] = useState({
-    profile_picture: null,
-    phone_number: "",
   });
 
   // Update state when user data is available
@@ -32,44 +32,56 @@ const Profile = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (userDetails) {
-      setDetailsForm({
-        profile_picture: null, // File input cannot hold a default value
-        phone_number: userDetails.phone_number || "",
-      });
-    }
-  }, [userDetails]);
-
   const handleUserChange = (e) => {
     setUserForm({ ...userForm, [e.target.name]: e.target.value });
   };
-
-  const handleDetailsChange = (e) => {
-    if (e.target.name === "profile_picture") {
-      setDetailsForm({ ...detailsForm, profile_picture: e.target.files[0] });
-    } else {
-      setDetailsForm({ ...detailsForm, [e.target.name]: e.target.value });
-    }
-  };
-
   const handleUserUpdate = () => {
     updateUser(userForm);
     setShowUserModal(false);
   };
 
-const handleDetailsUpdate = () => {
-  const formData = new FormData();
-  formData.append("phone_number", detailsForm.phone_number);
-  
-  if (detailsForm.profile_picture) {
-    formData.append("profile_picture", detailsForm.profile_picture);
-  }
+  // ==================================================
+  const [detailsForm, setDetailsForm] = useState({
+    phone_number: '',
+    profile_picture: null
+  });
 
-  updateUserDetails(formData);
-  setShowDetailsModal(false);
-};
+  const [error, setError] = useState("");
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setDetailsForm((prev) => ({ ...prev, profile_picture: file }));
+    }
+  };
+
+  const handleDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setDetailsForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('phone_number', detailsForm.phone_number);
+
+    if (detailsForm.profile_picture) {
+      formData.append('profile_picture', detailsForm.profile_picture);
+    }
+
+    try {
+      // await axios.put(`http://127.0.0.1:8000/api/profile/`, formData, {
+      //   headers: { 'Content-Type': 'multipart/form-data' }
+      // });
+      updateUserDetails(formData)
+      setShowDetailsModal(false);
+      setError("");
+    } catch (error) {
+      setError("Failed to update details. Please try again.");
+      console.error("Error updating details:", error);
+    }
+  };
 
   return (
     <div>
@@ -164,16 +176,44 @@ const handleDetailsUpdate = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Update User Details</h5>
-                <button type="button" className="btn-close" onClick={() => setShowDetailsModal(false)}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowDetailsModal(false)}
+                ></button>
               </div>
-              <div className="modal-body">
-                <input type="file" name="profile_picture" className="form-control mb-2" onChange={handleDetailsChange} />
-                <input type="text" name="phone_number" className="form-control mb-2" placeholder="Phone Number" value={detailsForm.phone_number} onChange={handleDetailsChange} />
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowDetailsModal(false)}>Close</button>
-                <button className="btn btn-primary" onClick={handleDetailsUpdate}>Save Changes</button>
-              </div>
+              <form onSubmit={handleSubmit}>
+                <div className="modal-body">
+                  {error && <div className="alert alert-danger">{error}</div>}
+                  <input
+                    type="file"
+                    name="profile_picture"
+                    className="form-control mb-2"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                  <input
+                    type="text"
+                    name="phone_number"
+                    className="form-control mb-2"
+                    placeholder="Phone Number"
+                    value={detailsForm.phone_number}
+                    onChange={handleDetailsChange}
+                  />
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowDetailsModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
